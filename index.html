@@ -189,6 +189,12 @@
     font-size:11px;color:#fff;opacity:.8;pointer-events:none}
   .crew .c span{position:absolute;left:0;right:0;bottom:0;padding:14px 8px 6px;font-size:11px;font-weight:800;color:#fff;
     background:linear-gradient(transparent,rgba(0,0,0,.82));pointer-events:none}
+  /* sound state: the ▶ badge doubles as the speaker indicator while a card plays */
+  .crew .c.playing .play-hint{opacity:1;background:rgba(0,0,0,.75);border-color:rgba(166,255,143,.7)}
+  .sound-toggle{margin-left:8px;background:rgba(255,255,255,.06);border:1px solid var(--line2);color:var(--mut2);
+    font-size:11px;font-weight:800;padding:3px 9px;border-radius:999px;cursor:pointer;vertical-align:1px}
+  .sound-toggle:hover{color:#fff;border-color:rgba(166,255,143,.6)}
+  .sound-toggle[aria-pressed="false"]{opacity:.65}
 
   /* lightbox */
   .lightbox{position:fixed;inset:0;z-index:200;background:rgba(4,4,8,.92);backdrop-filter:blur(6px);
@@ -431,7 +437,9 @@
     <div class="eyebrow">Meet the crew</div>
     <h2>12 growers, <span class="g">each with a personality.</span></h2>
     <p class="lede">Pick an avatar to run your farm — every one carries a permanent stat boost that stacks and never expires. Five are free (one unlocked per farm level); the rest are collectible. They also hang out in your 3D grow room and star in the game's videos.</p>
-    <p class="hs-note" style="margin-top:-8px;margin-bottom:4px">Hover a grower to see them in action · tap to watch full screen</p>
+    <p class="hs-note" style="margin-top:-8px;margin-bottom:4px">Hover a grower to hear them talk · tap to watch full screen
+      <button class="sound-toggle" id="crewSound" aria-pressed="true">🔊 Sound on</button>
+    </p>
     <div class="crew" id="crewGrid">
       <div class="c" data-name="Grower Girl" data-video="video/growergirl.mp4"><video muted loop playsinline preload="none" poster="img/avatars/growergirl_pic.jpg" src="video/growergirl.mp4"></video><span class="play-hint">▶</span><span>Grower Girl</span></div>
       <div class="c" data-name="Grower Boy" data-video="video/growerboy.mp4"><video muted loop playsinline preload="none" poster="img/avatars/growerboy_pic.jpg" src="video/growerboy.mp4"></video><span class="play-hint">▶</span><span>Grower Boy</span></div>
@@ -690,11 +698,60 @@
   var lbName = document.getElementById("lbName");
   var lbClose = document.getElementById("lbClose");
 
+  // Hover plays WITH sound. Browsers refuse unmuted playback until the visitor has
+  // interacted with the page at least once, so the first hover falls back to silent
+  // and we retry with sound as soon as any click/key/scroll gives us permission.
+  var soundBtn = document.getElementById("crewSound");
+  var soundOn = true;      // what the visitor wants
+  var canSound = false;    // what the browser currently allows
+  var nowPlaying = null;
+
+  function markGesture(){
+    if(canSound) return;
+    canSound = true;
+    // if they're already hovering something silent, bring the sound in immediately
+    if(nowPlaying && soundOn) nowPlaying.muted = false;
+  }
+  ["pointerdown","keydown","touchstart"].forEach(function(evt){
+    document.addEventListener(evt, markGesture, { once:false, passive:true });
+  });
+
+  function stopCard(v){
+    if(!v) return;
+    v.pause(); v.currentTime = 0; v.muted = true;
+    if(v.parentElement) v.parentElement.classList.remove("playing");
+  }
+
+  if(soundBtn){
+    soundBtn.addEventListener("click", function(){
+      soundOn = !soundOn;
+      soundBtn.textContent = soundOn ? "🔊 Sound on" : "🔇 Sound off";
+      soundBtn.setAttribute("aria-pressed", String(soundOn));
+      if(nowPlaying) nowPlaying.muted = !soundOn || !canSound;
+    });
+  }
+
   grid.querySelectorAll(".c").forEach(function(card){
     var v = card.querySelector("video");
-    card.addEventListener("mouseenter", function(){ v.currentTime = 0; v.play().catch(function(){}); });
-    card.addEventListener("mouseleave", function(){ v.pause(); v.currentTime = 0; });
+    card.addEventListener("mouseenter", function(){
+      if(nowPlaying && nowPlaying !== v) stopCard(nowPlaying);   // only one voice at a time
+      nowPlaying = v;
+      card.classList.add("playing");
+      v.currentTime = 0;
+      v.muted = !(soundOn && canSound);
+      v.play().catch(function(){
+        // unmuted play refused — drop to silent so the preview still runs
+        v.muted = true;
+        v.play().catch(function(){});
+      });
+    });
+    card.addEventListener("mouseleave", function(){
+      stopCard(v);
+      if(nowPlaying === v) nowPlaying = null;
+    });
     card.addEventListener("click", function(){
+      stopCard(v);                      // don't let the hover preview talk over the lightbox
+      if(nowPlaying === v) nowPlaying = null;
       lbVideo.src = card.dataset.video;
       lbName.textContent = card.dataset.name;
       lightbox.classList.add("open");

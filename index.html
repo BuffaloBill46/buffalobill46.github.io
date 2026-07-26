@@ -127,6 +127,74 @@
   .cta-band{background:linear-gradient(115deg,rgba(200,107,255,.12),rgba(77,166,255,.1),rgba(82,227,0,.12));
     border:1px solid var(--line2);border-radius:24px;padding:clamp(30px,6vw,56px);text-align:center;margin:20px 0}
 
+  /* ── PRE-LAUNCH HEAD START (X connect + tick pre-earn) ── */
+  .headstart{background:
+      radial-gradient(600px 300px at 15% 0%, rgba(200,107,255,.16), transparent 60%),
+      radial-gradient(600px 300px at 100% 100%, rgba(82,227,0,.14), transparent 60%),
+      linear-gradient(180deg,var(--panel),var(--bg2));
+    border:1px solid var(--line2);border-radius:26px;padding:clamp(24px,5vw,48px);position:relative;overflow:hidden;
+    box-shadow:0 0 60px rgba(120,90,255,.15)}
+  .hs-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(24px,4vw,44px);align-items:center}
+  @media(max-width:820px){.hs-grid{grid-template-columns:1fr}}
+  .hs-pill{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:99px;
+    background:rgba(82,227,0,.12);border:1px solid rgba(82,227,0,.35);color:#a6ff8f;
+    font-size:11.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px}
+  .hs-pill i{width:7px;height:7px;border-radius:99px;background:var(--g);box-shadow:0 0 8px var(--g);animation:pulse 2s infinite}
+  .hs-egg{font-size:clamp(40px,8vw,64px);line-height:1;filter:drop-shadow(0 0 22px rgba(120,255,157,.5))}
+  /* connect panel */
+  .hs-panel{background:rgba(8,8,12,.55);border:1px solid var(--line2);border-radius:20px;padding:clamp(20px,3vw,28px);text-align:center}
+  .x-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;
+    background:#000;color:#fff;border:1px solid #2f2f38;border-radius:14px;padding:14px 18px;
+    font-family:var(--body);font-weight:800;font-size:15px;cursor:pointer;transition:transform .12s,border-color .2s}
+  .x-btn:hover{transform:translateY(-2px);border-color:#555}
+  .x-in{display:flex;gap:8px;margin-top:6px}
+  .x-in input{flex:1;background:#0b0b10;border:1px solid var(--line2);border-radius:12px;color:var(--ink);
+    font-family:var(--mono);font-size:15px;padding:12px 14px;outline:none;text-align:center;letter-spacing:.02em}
+  .x-in input:focus{border-color:var(--p)}
+  .x-in button{background:var(--grad);color:#0a0a0e;border:none;border-radius:12px;padding:0 18px;font-weight:800;cursor:pointer}
+  .hs-note{color:var(--mut2);font-size:11.5px;margin-top:12px;line-height:1.5}
+  /* connected state */
+  .hs-me{display:flex;align-items:center;gap:12px;justify-content:center;margin-bottom:4px}
+  .hs-me img{width:52px;height:52px;border-radius:50%;border:2px solid var(--g);object-fit:cover;box-shadow:0 0 14px rgba(82,227,0,.4)}
+  .hs-me .h{font-weight:800;font-size:16px}
+  .hs-me .h small{display:block;color:var(--mut);font-weight:600;font-size:11px}
+  .tickwrap{margin:18px 0 8px}
+  .tickbar{display:flex;gap:4px;margin:10px 0 6px}
+  .tickbar .t{flex:1;height:9px;border-radius:4px;background:#20202a;transition:background .3s}
+  .tickbar .t.on{background:linear-gradient(90deg,#4dff9d,#52e300);box-shadow:0 0 8px rgba(82,227,0,.5)}
+  .tickcount{font-family:var(--disp);font-weight:900;font-size:22px}
+  .tickcount .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .earn-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+  @media(max-width:420px){.earn-row{grid-template-columns:1fr}}
+  .earn-btn{background:var(--panel2);border:1px solid var(--line2);border-radius:12px;padding:11px 12px;color:var(--ink);
+    font-weight:700;font-size:13px;cursor:pointer;text-align:center;transition:transform .12s,border-color .2s}
+  .earn-btn:hover{transform:translateY(-1px);border-color:var(--g)}
+  .earn-btn b{color:var(--g)}
+  .earn-btn.done{opacity:.5;pointer-events:none}
+  .hs-egg-won{background:rgba(82,227,0,.1);border:1px solid rgba(82,227,0,.4);border-radius:12px;padding:10px 12px;
+    margin-top:12px;font-size:13px;font-weight:800;color:#a6ff8f}
+  .hs-disconnect{background:none;border:none;color:var(--mut2);font-size:11px;cursor:pointer;margin-top:12px;text-decoration:underline}
+
+  /* crew gallery */
+  .crew{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;margin-top:30px}
+  .crew .c{border-radius:16px;overflow:hidden;border:1px solid var(--line);background:#000;position:relative;aspect-ratio:1}
+  .crew .c img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
+  .crew .c:hover img{transform:scale(1.07)}
+  .crew .c span{position:absolute;left:0;right:0;bottom:0;padding:14px 8px 6px;font-size:11px;font-weight:800;color:#fff;
+    background:linear-gradient(transparent,rgba(0,0,0,.82))}
+
+  /* facts band */
+  .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:30px}
+  .fact{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:16px;padding:20px}
+  .fact .fic{font-size:24px}
+  .fact h3{font-family:var(--disp);font-weight:900;font-size:15px;margin:10px 0 6px}
+  .fact p{color:var(--mut);font-size:13px;margin:0}
+  .fact b{color:var(--ink)}
+
+  /* locked teaser */
+  .locked-teaser{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:12px;
+    background:rgba(255,255,255,.03);border:1px dashed var(--line2);color:var(--mut);font-weight:800;font-size:14px;cursor:not-allowed}
+
   footer{border-top:1px solid var(--line);padding:40px 0 60px;margin-top:40px}
   .disclaimer{background:rgba(255,178,77,.05);border:1px solid rgba(255,178,77,.2);border-radius:14px;padding:18px 20px;margin-bottom:26px}
   .disclaimer h4{margin:0 0 8px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#ffcf8f}
@@ -154,7 +222,7 @@
   </div>
 </nav>
 
-<div class="ribbon">🚧 <b>In active development</b> — targeting launch in <b>~3–6 months</b>. No $GREEN token exists yet &amp; nothing is for sale.</div>
+<div class="ribbon">🥚 <b>Pre-launch head start is LIVE</b> — connect your X below and start banking Weedster Egg ticks before day one. No wallet, no cost.</div>
 
 <div class="wrap" id="top">
 
@@ -166,10 +234,60 @@
     <p class="tagline">Grow, breed, and earn on Solana — a <b style="color:var(--ink)">fixed-supply</b> play-to-earn game.</p>
     <p class="subline">Build a cannabis grow empire that farms <b>$GREEN</b> every second. 420 billion tokens, minted once at launch, never again. Every token spent in-game is burned forever.</p>
     <div class="cta">
-      <a class="btn btn-primary" href="plants-and-boosts.html">🌿 See the Plants &amp; Boosts</a>
-      <a class="btn btn-ghost" href="#roadmap">View the Roadmap</a>
+      <a class="btn btn-primary" href="#headstart">🥚 Bank Your Head Start</a>
+      <a class="btn btn-ghost" href="plants-and-boosts.html">🌿 See the Plants &amp; Boosts</a>
     </div>
   </header>
+
+  <!-- PRE-LAUNCH HEAD START -->
+  <section id="headstart" style="padding-top:clamp(20px,4vw,40px)">
+    <div class="headstart">
+      <div class="hs-grid">
+        <div>
+          <div class="hs-pill"><i></i> Pre-launch · earn before day one</div>
+          <h2 style="margin-bottom:12px">Start earning <span class="g">before the game even opens.</span></h2>
+          <p class="lede" style="margin-bottom:16px">In GREEN LIFE, <b>10 ticks = a Weedster Egg</b> — and every egg cracks a guaranteed <b style="color:var(--p)">Epic, Legendary, or Mythical</b> strain, the rarest cards in the game. You earn ticks by posting and referring friends. Connect your X now and you can <b>bank those ticks today</b>, so you walk into launch with eggs already waiting to crack.</p>
+          <div class="facts" style="margin-top:18px;grid-template-columns:1fr 1fr">
+            <div class="fact"><div class="fic">📣</div><h3>Post = +2 ticks</h3><p>Share the daily drop on X for <b>2 ticks</b> a day.</p></div>
+            <div class="fact"><div class="fic">🤝</div><h3>Refer = +1 tick</h3><p>Each friend who joins <b>and activates</b> at launch = <b>1 tick</b> — no cap.</p></div>
+          </div>
+        </div>
+
+        <div class="hs-panel" id="hsPanel">
+          <!-- disconnected -->
+          <div id="hsConnect">
+            <div class="hs-egg">🥚</div>
+            <h3 style="font-family:var(--disp);font-weight:900;font-size:19px;margin:12px 0 6px">Connect X to begin</h3>
+            <p style="color:var(--mut);font-size:13px;margin:0 0 16px">Just your public @handle — no login, no password, no wallet.</p>
+            <button class="x-btn" id="xShowInput">𝕏&nbsp; Connect X</button>
+            <div class="x-in" id="xInputRow" style="display:none">
+              <input id="xHandle" type="text" placeholder="yourhandle" autocomplete="off" spellcheck="false">
+              <button id="xGo">Go</button>
+            </div>
+            <p class="hs-note">Preview — tracked to your <b>X handle</b>, no wallet needed yet. At launch your posts are verified still-live and referral ticks land as your friends activate. Nothing here costs money or touches a wallet.</p>
+          </div>
+          <!-- connected -->
+          <div id="hsEarn" style="display:none">
+            <div class="hs-me">
+              <img id="hsPic" src="" alt="">
+              <div class="h" id="hsName" style="text-align:left">@you<small>your head start</small></div>
+            </div>
+            <div class="tickwrap">
+              <div class="tickbar" id="tickBar"></div>
+              <div class="tickcount"><span class="g" id="tickNum">0</span> / 10 ticks · <span id="eggNum">0</span> 🥚 banked</div>
+            </div>
+            <div class="earn-row">
+              <button class="earn-btn" id="earnPost">📣 Post today <b>+2</b></button>
+              <button class="earn-btn" id="earnRefer">🤝 Copy invite <b>+1</b></button>
+            </div>
+            <div class="hs-egg-won" id="eggWon" style="display:none"></div>
+            <button class="hs-disconnect" id="hsDisconnect">Disconnect</button>
+            <p class="hs-note">Preview on this device. At launch, connect the same X in-game to claim your eggs. Posts are re-checked — delete them and those ticks don't count. Referral ticks land as each friend joins &amp; activates.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- ABOUT -->
   <section id="about">
@@ -231,6 +349,41 @@
       <div class="gitem"><img loading="lazy" src="img/strains/crossbreed.jpg" alt="Cross Breed Mythical"><span>Cross Breed</span></div>
     </div>
     <div style="text-align:center;margin-top:24px"><a class="btn btn-ghost" href="plants-and-boosts.html">See all 16 strains + 10 boosts →</a></div>
+  </section>
+
+  <!-- MEET THE CREW -->
+  <section>
+    <div class="eyebrow">Meet the crew</div>
+    <h2>12 growers, <span class="g">each with a personality.</span></h2>
+    <p class="lede">Pick an avatar to run your farm — every one carries a permanent stat boost that stacks and never expires. Five are free (one unlocked per farm level); the rest are collectible. They also hang out in your 3D grow room and star in the game's videos.</p>
+    <div class="crew">
+      <div class="c"><img loading="lazy" src="img/avatars/growergirl_pic.jpg" alt="Grower Girl"><span>Grower Girl</span></div>
+      <div class="c"><img loading="lazy" src="img/avatars/growerboy_pic.jpg" alt="Grower Boy"><span>Grower Boy</span></div>
+      <div class="c"><img loading="lazy" src="img/avatars/kong_pic.jpg" alt="Kong"><span>Kong</span></div>
+      <div class="c"><img loading="lazy" src="img/avatars/panda_pic.jpg" alt="Puff Panda"><span>Puff Panda</span></div>
+      <div class="c"><img loading="lazy" src="img/avatars/penguin_pic.jpg" alt="Penguin"><span>Penguin</span></div>
+      <div class="c"><img loading="lazy" src="img/avatars/professor_pic.jpg" alt="Professor Chaos"><span>Professor Chaos</span></div>
+      <div class="c"><img loading="lazy" src="img/avatars/robot_pic.jpg" alt="Bot"><span>Bot</span></div>
+      <div class="c"><img loading="lazy" src="img/avatars/frog_pic.jpg" alt="Ribbit"><span>Ribbit</span></div>
+      <div class="c"><img loading="lazy" src="img/avatars/cat_pic.jpg" alt="Cat"><span>Cat</span></div>
+      <div class="c"><img loading="lazy" src="img/avatars/dog_pic.jpg" alt="Dog"><span>Dog</span></div>
+    </div>
+  </section>
+
+  <!-- COOL FACTS -->
+  <section>
+    <div class="eyebrow">Why it's different</div>
+    <h2>Cool things about <span class="g">GREEN LIFE.</span></h2>
+    <div class="facts">
+      <div class="fact"><div class="fic">🔒</div><h3>The team can't rug it</h3><p>The huge held-back token reserve lives in a contract vault with <b>no withdraw key</b> — not the devs, not anyone. It can only ever fund liquidity or get burned.</p></div>
+      <div class="fact"><div class="fic">👛</div><h3>The game never holds your tokens</h3><p>There's no custodial wallet. Every buy and payout signs <b>straight from your own wallet</b>, so a hack can't drain the players.</p></div>
+      <div class="fact"><div class="fic">🔥</div><h3>420B, then it only shrinks</h3><p>Minted <b>once</b>, never again — and every token spent in-game is burned forever. Supply tightens as the game grows.</p></div>
+      <div class="fact"><div class="fic">🧬</div><h3>Mythicals are truly rare</h3><p>The top tier is never in a normal pack. You only get one by <b>breeding</b> or cracking a Weedster Egg — each one unique.</p></div>
+      <div class="fact"><div class="fic">🎲</div><h3>Nothing is rigged</h3><p>Packs, breeds, and PvP all roll on-chain through a <b>Verifiable Random Function</b>. No one can predict or fix an outcome.</p></div>
+      <div class="fact"><div class="fic">⚙️</div><h3>Self-sufficient after launch</h3><p>Once it's live the economy runs itself — locked vaults, auto burns, per-trade fees. The team just steers the treasury.</p></div>
+      <div class="fact"><div class="fic">🎮</div><h3>A game first</h3><p>Grow, breed, cook, raid, spin the bong, run tournaments, decorate a 3D room. The earning is baked into playing, not bolted on.</p></div>
+      <div class="fact"><div class="fic">◎</div><h3>Built on Solana</h3><p>Fast and cheap, so growing, trading, and PvP feel like a game — not a gas bill.</p></div>
+    </div>
   </section>
 
   <!-- FEATURES -->
@@ -296,8 +449,11 @@
     <div class="cta-band">
       <div class="eyebrow" style="color:#d7c4ff">Follow the grow</div>
       <h2 style="margin-bottom:12px">Early, but <span class="g">real.</span></h2>
-      <p class="lede center" style="max-width:52ch">GREEN LIFE isn't live yet — but the game is built and the genetics are ready. Dig into every strain and boost while we finish the on-chain build.</p>
-      <div class="cta"><a class="btn btn-primary" href="plants-and-boosts.html">🌿 Explore the Plants &amp; Boosts</a></div>
+      <p class="lede center" style="max-width:52ch">GREEN LIFE isn't live yet — but the game is built and the genetics are ready. Bank your Weedster Egg head start now, then dig into every strain while we finish the on-chain build.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="#headstart">🥚 Bank Your Head Start</a>
+        <span class="locked-teaser" title="Opens at launch">🔒 Buy Your Farm — opens at launch</span>
+      </div>
     </div>
   </section>
 
@@ -329,6 +485,94 @@
     </div>
   </div>
 </footer>
+
+<script>
+(function(){
+  // ── Pre-launch head start: connect X (public handle only, no login) + bank Weedster Egg ticks.
+  // Saved in localStorage so a visitor's progress persists on their device. Real cross-device
+  // crediting to the connected X happens at launch via the backend (see note in the panel).
+  var TARGET = 10, POST = 2, REFER = 1, DAY = 864e5;
+  var KEY = "gl_headstart_v1";
+  var GAME_URL = location.origin + location.pathname; // referral link base
+  var el = function(id){ return document.getElementById(id); };
+  var load = function(){ try { return JSON.parse(localStorage.getItem(KEY)) || null; } catch(e){ return null; } };
+  var save = function(s){ try { localStorage.setItem(KEY, JSON.stringify(s)); } catch(e){} };
+  var state = load(); // { handle, ticks, eggs, lastPost }
+
+  function render(){
+    if(!state){ el("hsConnect").style.display="block"; el("hsEarn").style.display="none"; return; }
+    el("hsConnect").style.display="none";
+    el("hsEarn").style.display="block";
+    el("hsPic").src = "https://unavatar.io/twitter/" + encodeURIComponent(state.handle);
+    el("hsPic").onerror = function(){ this.onerror=null; this.src="img/logo.png"; };
+    el("hsName").innerHTML = "@"+state.handle+"<small>your head start</small>";
+    var into = state.ticks % TARGET;
+    el("tickNum").textContent = into;
+    el("eggNum").textContent = state.eggs;
+    // tick bar
+    var bar = el("tickBar"); bar.innerHTML = "";
+    for(var i=0;i<TARGET;i++){ var d=document.createElement("div"); d.className="t"+(i<into?" on":""); bar.appendChild(d); }
+    // post cooldown (once/day)
+    var postBtn = el("earnPost");
+    var canPost = !state.lastPost || (Date.now() - state.lastPost >= DAY);
+    postBtn.classList.toggle("done", !canPost);
+    postBtn.innerHTML = canPost ? '📣 Post today <b>+2</b>' : '✓ Posted today';
+    // egg banner
+    el("eggWon").style.display = state.eggs>0 ? "block" : "none";
+    if(state.eggs>0) el("eggWon").textContent = "🥚 " + state.eggs + " Weedster Egg" + (state.eggs>1?"s":"") + " banked — waiting for you at launch!";
+  }
+
+  function addTicks(n){
+    var before = Math.floor(state.ticks / TARGET);
+    state.ticks += n;
+    var after = Math.floor(state.ticks / TARGET);
+    if(after > before) state.eggs += (after - before);
+    save(state); render();
+  }
+
+  // connect flow
+  el("xShowInput").addEventListener("click", function(){
+    el("xInputRow").style.display="flex"; el("xHandle").focus();
+  });
+  function connect(){
+    var h = (el("xHandle").value||"").trim().replace(/^@+/,"").replace(/\s+/g,"");
+    if(!h) return;
+    state = { handle:h, ticks:0, eggs:0, lastPost:0 };
+    save(state); render();
+  }
+  el("xGo").addEventListener("click", connect);
+  el("xHandle").addEventListener("keydown", function(e){ if(e.key==="Enter") connect(); });
+
+  // earn: post on X (+2, once/day) — opens a real tweet with the referral link baked in
+  el("earnPost").addEventListener("click", function(){
+    if(state.lastPost && (Date.now()-state.lastPost < DAY)) return;
+    var ref = GAME_URL + "?ref=" + encodeURIComponent(state.handle);
+    var text = "🌿 I'm banking my head start for GREEN LIFE — the first fixed-supply P2E on Solana. 420B minted once, never again. Grow, breed & earn $GREEN 👇\n" + ref + "\n#GREENLIFE #Solana";
+    window.open("https://twitter.com/intent/tweet?text=" + encodeURIComponent(text), "_blank", "noopener");
+    state.lastPost = Date.now();
+    addTicks(POST);
+  });
+
+  // earn: copy invite (+1 per use — simulated referral on the static page)
+  el("earnRefer").addEventListener("click", function(){
+    var ref = GAME_URL + "?ref=" + encodeURIComponent(state.handle);
+    try { navigator.clipboard.writeText(ref); } catch(e){}
+    var b = el("earnRefer"); var old = b.innerHTML;
+    b.innerHTML = "✓ Link copied!";
+    addTicks(REFER);
+    setTimeout(function(){ b.innerHTML = old; render(); }, 1400);
+  });
+
+  el("hsDisconnect").addEventListener("click", function(){
+    if(!confirm("Disconnect and clear your saved head start on this device?")) return;
+    state = null; try { localStorage.removeItem(KEY); } catch(e){}
+    el("xInputRow").style.display="none"; el("xHandle").value="";
+    render();
+  });
+
+  render();
+})();
+</script>
 
 </body>
 </html>

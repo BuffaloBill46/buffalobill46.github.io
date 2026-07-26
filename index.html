@@ -199,6 +199,17 @@
   .lightbox .lb-name{position:absolute;top:26px;left:28px;font-family:var(--disp);font-weight:900;
     font-size:16px;letter-spacing:.02em;color:#fff}
 
+  /* games showcase — bigger banner cards using real in-game hero art */
+  .games{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-top:30px}
+  .gamecard{border-radius:20px;overflow:hidden;border:1px solid var(--line);background:#000;position:relative;aspect-ratio:3/4}
+  .gamecard img{width:100%;height:100%;object-fit:cover;object-position:50% 20%}
+  .gamecard .gc-fee{position:absolute;top:14px;right:14px;font-size:10.5px;font-weight:800;letter-spacing:.04em;
+    color:#a6ff8f;background:rgba(8,20,8,.75);border:1px solid rgba(82,227,0,.4);padding:4px 10px;border-radius:99px}
+  .gamecard .gc-body{position:absolute;left:0;right:0;bottom:0;padding:20px 18px 16px;
+    background:linear-gradient(transparent,rgba(0,0,0,.55) 40%,rgba(0,0,0,.92))}
+  .gamecard h3{font-family:var(--disp);font-weight:900;font-size:18px;margin:0 0 6px;color:#fff}
+  .gamecard p{color:#d3d4de;font-size:13px;margin:0;line-height:1.5}
+
   /* facts band */
   .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:30px}
   .fact{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:16px;padding:20px}
@@ -248,7 +259,7 @@
     <div class="badge"><i></i> Pre-launch · Solana</div>
     <h1 class="wm">GREEN&nbsp;LIFE</h1>
     <p class="tagline">Grow, breed, and earn on Solana — a <b style="color:var(--ink)">fixed-supply</b> play-to-earn game.</p>
-    <p class="subline">Build a cannabis grow empire that farms <b>$GREEN</b> every second. 420 billion tokens, minted once at launch, never again. Every token spent in-game is burned forever.</p>
+    <p class="subline">Build a grow empire that farms <b>$GREEN</b> every second. Plant and harvest three kinds of strains, breed one-of-a-kind Mythicals, rip packs for cards and gear, arm your farm with weapons and shields, trade on the player marketplace, and battle other growers in PvP. 420 billion tokens, minted once at launch, never again — every token spent in-game is burned forever.</p>
     <div class="cta">
       <a class="btn btn-primary" href="#headstart">🥚 Bank Your Head Start</a>
       <a class="btn btn-ghost" href="plants-and-boosts.html">🌿 See the Plants &amp; Boosts</a>
@@ -367,6 +378,28 @@
     <div style="text-align:center;margin-top:24px"><a class="btn btn-ghost" href="plants-and-boosts.html">See all 16 strains + 10 boosts →</a></div>
   </section>
 
+  <!-- WEAPONS & DEFENSE -->
+  <section>
+    <div class="eyebrow">Defend your farm</div>
+    <h2>Weapons &amp; shields, <span class="g">every one real art.</span></h2>
+    <p class="lede">Other players can raid your farm for $GREEN — weapons and shields are how you fight back. <b>Deploy a weapon</b> and its DP (Defense Power) adds to your farm's raid resistance for 7 days, then it burns. <b>Activate a shield</b> instead and you're un-raidable for its whole duration — no stacking, one shield at a time. Pulled from the Weapons Pack, or earned by combining lower-tier gear.</p>
+    <div class="gallery">
+      <div class="gitem"><img loading="lazy" src="img/weapons/deadbolt.jpg" alt="Dead Bolt"><span>Dead Bolt · Common</span></div>
+      <div class="gitem"><img loading="lazy" src="img/weapons/dog.jpg" alt="Guard Dog"><span>Guard Dog · Common</span></div>
+      <div class="gitem"><img loading="lazy" src="img/weapons/shank.jpg" alt="Shank"><span>Shank · Uncommon</span></div>
+      <div class="gitem"><img loading="lazy" src="img/weapons/cam.jpg" alt="Security Cam"><span>Security Cam · Uncommon</span></div>
+      <div class="gitem"><img loading="lazy" src="img/weapons/pistol.jpg" alt="Pistol"><span>Pistol · Rare</span></div>
+      <div class="gitem"><img loading="lazy" src="img/weapons/fence.jpg" alt="Razor Fence"><span>Razor Fence · Rare</span></div>
+      <div class="gitem"><img loading="lazy" src="img/shields/shield8.jpg" alt="8-Hour Shield"><span>8-Hour Shield · Rare</span></div>
+      <div class="gitem"><img loading="lazy" src="img/weapons/turret.jpg" alt="Auto-Turret"><span>Auto-Turret · Epic</span></div>
+      <div class="gitem"><img loading="lazy" src="img/weapons/rpg.jpg" alt="RPG"><span>RPG · Epic</span></div>
+      <div class="gitem"><img loading="lazy" src="img/shields/shield12.jpg" alt="12-Hour Shield"><span>12-Hour Shield · Epic</span></div>
+      <div class="gitem"><img loading="lazy" src="img/weapons/drone.jpg" alt="Attack Drone"><span>Attack Drone · Legendary</span></div>
+      <div class="gitem"><img loading="lazy" src="img/weapons/gator.jpg" alt="Gator Pit"><span>Gator Pit · Legendary</span></div>
+      <div class="gitem"><img loading="lazy" src="img/shields/shield24.jpg" alt="24-Hour Shield"><span>24-Hour Shield · Legendary</span></div>
+    </div>
+  </section>
+
   <!-- MEET THE CREW -->
   <section>
     <div class="eyebrow">Meet the crew</div>
@@ -393,6 +426,26 @@
     <button class="lb-close" id="lbClose" aria-label="Close">✕</button>
     <video id="lbVideo" controls autoplay loop playsinline></video>
   </div>
+
+  <!-- PVP GAMES -->
+  <section>
+    <div class="eyebrow">Bet against other growers</div>
+    <h2>5 PvP games, <span class="g">all wagered in $GREEN.</span></h2>
+    <p class="lede">Every game runs on the same simple rule: a small house fee (2.5% burned · 2.5% treasury, 20% on Rob) — everything else goes to the winner.</p>
+    <div class="games">
+      <div class="gamecard"><img loading="lazy" src="img/pvp/rob_hero.jpg" alt="Rob"><span class="gc-fee">20% fee</span>
+        <div class="gc-body"><h3>🥷 Rob</h3><p>Send your combined power to raid a rival's farm for their $GREEN — full cinematic faceoff, anti-grief shields protect newcomers.</p></div></div>
+      <div class="gamecard"><img loading="lazy" src="img/pvp/bong_hero.jpg" alt="Spin The Bong"><span class="gc-fee">5% fee</span>
+        <div class="gc-body"><h3>💨 Spin The Bong</h3><p>2–10 growers ante the same bet, the bong spins, and it picks a winner — Heads Up, Winner Take All, or Elimination.</p></div></div>
+      <div class="gamecard"><img loading="lazy" src="img/pvp/rps_hero.jpg" alt="Rock Paper Scissors"><span class="gc-fee">5% fee</span>
+        <div class="gc-body"><h3>✊ Rock Paper Scissors</h3><p>Heads-up — lock in your 7 moves in secret, then watch them reveal turn by turn. First to 3 points takes the pot.</p></div></div>
+      <div class="gamecard"><img loading="lazy" src="img/pvp/bud_hero.jpg" alt="Closest to the Bud"><span class="gc-fee">5% fee</span>
+        <div class="gc-body"><h3>🎯 Closest to the Bud</h3><p>Up to 25 players each pick a number 1–420. Closest guesses split the prize nugs — you can win more than one.</p></div></div>
+      <div class="gamecard"><img loading="lazy" src="img/pvp/burn_hero.jpg" alt="Greedy Smoker"><span class="gc-fee">5% fee</span>
+        <div class="gc-body"><h3>🔥 Greedy Smoker</h3><p>Everyone antes into the circle and passes the joint. Hold it too long and you bust — cash out before it burns out to keep your share.</p></div></div>
+    </div>
+    <p class="lede" style="margin-top:20px">All 5 also run as scheduled <b>Tournaments</b> — bigger pools, a countdown, and a live broadcast alert when it's time to play.</p>
+  </section>
 
   <!-- COOL FACTS -->
   <section>

@@ -108,6 +108,9 @@
 
   /* gallery */
   .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-top:30px}
+  .gallery-group-label{font-family:var(--disp);letter-spacing:.22em;font-size:12px;color:var(--p);
+    text-transform:uppercase;margin:26px 0 12px}
+  .gallery-group-label:first-of-type{margin-top:16px}
   .gitem{border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#000;position:relative;aspect-ratio:2/3}
   .gitem img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
   .gitem:hover img{transform:scale(1.06)}
@@ -440,12 +443,16 @@
     <div class="eyebrow">The boosts</div>
     <h2>10 boosts to <span class="g">supercharge your grow.</span></h2>
     <p class="lede">Five <b>plant boosts</b> pump a single plant's Grow Power; five <b>grower boosts</b> (cooked in the Kitchen) multiply your entire operation. Each has its own art — full effects live on the <a href="plants-boosts-weapons-shields.html">Plants &amp; Boosts</a> page.</p>
+    <div class="gallery-group-label">🌱 Plant Boosts — pump one plant's Grow Power</div>
     <div class="gallery">
       <div class="gitem"><b class="rc rC">Common</b><img loading="lazy" src="img/boosts/nutrient.jpg" alt="Nutrient Mix"><span>Nutrient Mix</span></div>
       <div class="gitem"><b class="rc rU">Uncommon</b><img loading="lazy" src="img/boosts/co2.jpg" alt="CO2 Burst"><span>CO₂ Burst</span></div>
       <div class="gitem"><b class="rc rR">Rare</b><img loading="lazy" src="img/boosts/spectrum.jpg" alt="Full Spectrum LEDs"><span>Full Spectrum LEDs</span></div>
       <div class="gitem"><b class="rc rE">Epic</b><img loading="lazy" src="img/boosts/root.jpg" alt="Root Stimulant"><span>Root Stimulant</span></div>
       <div class="gitem"><b class="rc rL">Legendary</b><img loading="lazy" src="img/boosts/serum.jpg" alt="Mystery Serum"><span>Mystery Serum</span></div>
+    </div>
+    <div class="gallery-group-label">🍳 Grower Boosts — cooked in the Kitchen, multiply your whole operation</div>
+    <div class="gallery">
       <div class="gitem"><b class="rc rC">Common</b><img loading="lazy" src="img/boosts/edibles.jpg" alt="Edibles"><span>Edibles</span></div>
       <div class="gitem"><b class="rc rU">Uncommon</b><img loading="lazy" src="img/boosts/wax.jpg" alt="Wax"><span>Wax</span></div>
       <div class="gitem"><b class="rc rR">Rare</b><img loading="lazy" src="img/boosts/hash.jpg" alt="Hash"><span>Hash</span></div>

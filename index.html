@@ -51,6 +51,15 @@
 
   /* hero */
   .hero{text-align:center;padding:clamp(48px,9vw,96px) 0 clamp(30px,5vw,56px)}
+  .signup-bg{
+    background:
+      linear-gradient(180deg, rgba(8,8,12,.55) 0%, rgba(8,8,12,.72) 55%, var(--bg) 100%),
+      url("img/grow-room-bg.jpg");
+    background-size:cover; background-position:center 30%;
+    border-radius:24px; margin:0 clamp(-16px,-4vw,-40px) clamp(20px,4vw,40px);
+    padding:0 clamp(16px,4vw,40px) 1px;
+  }
+  @media(max-width:900px){ .signup-bg{border-radius:0; margin:0 0 clamp(20px,4vw,40px)} }
   .hero .logo{width:clamp(120px,22vw,168px);height:clamp(120px,22vw,168px);border-radius:30px;margin:0 auto 22px;
     box-shadow:0 0 70px rgba(120,90,255,.45)}
   .badge{display:inline-flex;align-items:center;gap:8px;padding:6px 15px;border-radius:99px;
@@ -243,6 +252,39 @@
 </head>
 <body>
 
+<!-- INTRO GATE — plays once on load, tap/click anywhere (or video end) skips straight to the page -->
+<div id="introGate">
+  <video id="introVideo" src="video/intro-teaser.mp4" autoplay muted playsinline></video>
+  <div id="introSkip">tap to skip</div>
+</div>
+<style>
+  #introGate{position:fixed;inset:0;z-index:9999;background:#050308;
+    display:flex;align-items:center;justify-content:center;cursor:pointer;
+    transition:opacity .5s ease;}
+  #introGate video{width:100%;height:100%;object-fit:cover;display:block}
+  #introSkip{position:absolute;left:0;right:0;bottom:clamp(20px,5vw,40px);text-align:center;
+    color:rgba(255,255,255,.55);font-size:12px;letter-spacing:.15em;text-transform:uppercase;
+    font-family:var(--body);pointer-events:none}
+  #introGate.leaving{opacity:0}
+</style>
+<script>
+(function(){
+  var gate = document.getElementById("introGate");
+  var vid = document.getElementById("introVideo");
+  var done = false;
+  function finish(){
+    if(done) return;
+    done = true;
+    gate.classList.add("leaving");
+    setTimeout(function(){ gate.remove(); }, 520);
+  }
+  gate.addEventListener("click", finish);
+  if(vid){ vid.addEventListener("ended", finish); }
+  // safety net — never let a stalled/blocked video trap a visitor on the gate
+  setTimeout(finish, 14000);
+})();
+</script>
+
 <nav>
   <div class="nav-in">
     <a class="nav-logo" href="#top"><img src="img/logo.png" alt="GREEN LIFE"><span class="wm">GREEN LIFE</span></a>
@@ -262,6 +304,7 @@
 
 <div class="wrap" id="top">
 
+  <div class="signup-bg">
   <!-- HERO -->
   <header class="hero">
     <img class="logo" src="img/logo.png" alt="GREEN LIFE logo">
@@ -324,6 +367,7 @@
       </div>
     </div>
   </section>
+  </div>
 
   <!-- ABOUT -->
   <section id="about">

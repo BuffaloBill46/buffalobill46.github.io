@@ -251,6 +251,14 @@
   .foot-b .fm{font-family:var(--disp);font-weight:900;letter-spacing:.24em;font-size:13px;
     background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
   .foot-b .fine{color:var(--mut2);font-size:12px}
+  .foot-social{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+  .foot-social a,.foot-social span{display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:999px;
+    border:1px solid var(--line);font-size:12.5px;font-weight:700;color:var(--mut)}
+  .foot-social a{color:var(--ink);transition:border-color .15s,color .15s}
+  .foot-social a:hover{border-color:var(--g);color:var(--g)}
+  .foot-social span.soon{opacity:.55;cursor:default}
+  .foot-social .tag{font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--mut2);
+    background:rgba(255,255,255,.06);border-radius:999px;padding:2px 7px}
 </style>
 </head>
 <body>
@@ -639,6 +647,11 @@
 
 <footer>
   <div class="wrap">
+    <div class="foot-social">
+      <a href="https://x.com/GreenLifeGame" target="_blank" rel="noopener">𝕏 @GreenLifeGame</a>
+      <a href="https://t.me/GreenLifeGame" target="_blank" rel="noopener">✈️ Telegram</a>
+      <span class="soon">💬 Discord <span class="tag">Coming soon</span></span>
+    </div>
     <div class="disclaimer">
       <h4>⚠️ Important — please read</h4>
       <p>GREEN LIFE is an in-development video game and is <b>not yet launched</b>. As of now there is <b>no $GREEN token in existence, nothing for sale, and no live game</b>. Any launch window mentioned (currently an estimated ~3–6 months) is a goal, not a guarantee, and may change. This page is for informational purposes only. It is not financial, investment, or legal advice, and it is not an offer or solicitation to buy or sell any token, security, or asset. Do your own research. Beware of scams and imposters — this project has no token sale, presale, or airdrop at this time.</p>

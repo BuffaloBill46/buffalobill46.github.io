@@ -389,7 +389,7 @@
               <div class="hs-stat"><div class="n" id="referCountNum">0</div><div class="l">FRIENDS SIGNED UP</div></div>
             </div>
             <div class="earn-row">
-              <button class="earn-btn" id="earnPost">📣 Post today <b>+2</b></button>
+              <button class="earn-btn done" id="earnPost">📣 Post today <span class="soon-tag">+2 coming soon</span></button>
               <button class="earn-btn" id="earnRefer">🤝 Copy invite link</button>
             </div>
             <div class="hs-egg-won" id="eggWon" style="display:none"></div>
@@ -734,11 +734,9 @@
     // the backend can see other people's signups.
     el("totalTicksNum").textContent = state.ticks;
     el("referCountNum").textContent = state.refCount || 0;
-    // post cooldown (once/day)
-    var postBtn = el("earnPost");
-    var canPost = !state.lastPost || (Date.now() - state.lastPost >= DAY);
-    postBtn.classList.toggle("done", !canPost);
-    postBtn.innerHTML = canPost ? '📣 Post today <b>+2</b>' : '✓ Posted today';
+    // earnPost stays permanently greyed (class="earn-btn done" in the HTML, "+2 coming soon")
+    // until real X-post verification is live — render() must NEVER touch its class/label here,
+    // or it would un-grey itself the next time this function runs (e.g. right after connecting).
     // egg banner
     el("eggWon").style.display = state.eggs>0 ? "block" : "none";
     if(state.eggs>0) el("eggWon").textContent = "🥚 " + state.eggs + " Weedster Egg" + (state.eggs>1?"s":"") + " banked — waiting for you at launch!";
@@ -765,8 +763,13 @@
   el("xGo").addEventListener("click", connect);
   el("xHandle").addEventListener("keydown", function(e){ if(e.key==="Enter") connect(); });
 
-  // earn: post on X (+2, once/day) — opens a real tweet with the referral link baked in
+  // earn: post on X (+2, once/day) — opens a real tweet with the referral link baked in.
+  // GREYED OUT / not live yet: the "done" class only blocks pointer clicks (pointer-events:none
+  // doesn't stop a keyboard Enter/Space on a focused button), so this early return is the real
+  // guard. Remove it — and the "done" class + "coming soon" label in the HTML — together, once
+  // X-post verification actually ships.
   el("earnPost").addEventListener("click", function(){
+    return; // TODO: remove once real X-post verification (12h check) is live
     if(state.lastPost && (Date.now()-state.lastPost < DAY)) return;
     var ref = GAME_URL + "?ref=" + encodeURIComponent(state.handle);
     var text = "🌿 I'm banking my head start for GREEN LIFE — fixed-supply, zero-inflation P2E on Solana. 420B minted once, never again. Grow, breed & earn $GREEN 👇\n" + ref + "\n#GREENLIFE #Solana";

@@ -189,6 +189,20 @@
   .hs-egg-won{background:rgba(82,227,0,.1);border:1px solid rgba(82,227,0,.4);border-radius:12px;padding:10px 12px;
     margin-top:12px;font-size:13px;font-weight:800;color:#a6ff8f}
   .hs-disconnect{background:none;border:none;color:var(--mut2);font-size:11px;cursor:pointer;margin-top:12px;text-decoration:underline}
+  /* lifetime counters — ticks ever earned + friends referred, sit under the egg banner */
+  .hs-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+  .hs-stat{background:rgba(255,255,255,.03);border:1px solid var(--line2);border-radius:12px;padding:10px 8px;text-align:center}
+  .hs-stat .n{font-family:var(--disp);font-weight:900;font-size:19px;color:var(--ink)}
+  .hs-stat .l{font-size:10px;color:var(--mut2);font-weight:700;letter-spacing:.02em;margin-top:2px}
+
+  /* ── X FACTS — a growing list Cody can post from any time, no daily gate ── */
+  .xfacts-panel{max-width:640px;margin:0 auto;text-align:center}
+  .xfacts-panel p{color:var(--ink);font-size:15px;line-height:1.6;margin:14px 0 18px}
+  .xfacts-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media(max-width:480px){.xfacts-row{grid-template-columns:1fr}}
+  .xfacts-ghost{background:var(--panel2);border:1px solid var(--line2);border-radius:14px;padding:14px 18px;
+    font-family:var(--body);font-weight:800;font-size:14px;color:var(--ink);cursor:pointer;transition:transform .12s,border-color .2s}
+  .xfacts-ghost:hover{transform:translateY(-2px);border-color:var(--g)}
 
   /* crew gallery — hover = plays a preview video (poster = still image), click = lightbox */
   .crew{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;margin-top:30px}
@@ -354,7 +368,7 @@
               <input id="xHandle" type="text" placeholder="yourhandle" autocomplete="off" spellcheck="false">
               <button id="xGo">Go</button>
             </div>
-            <p class="hs-note">Preview — tracked to your <b>X handle</b>, no wallet needed yet. At launch your posts are verified still-live and referral ticks land as your friends activate. Nothing here costs money or touches a wallet.</p>
+            <p class="hs-note">Preview — tracked to your <b>X handle</b>, no wallet needed yet. Referral ticks land once each friend actually signs into the real game and activates their farm at launch — not the moment you share your link. Nothing here costs money or touches a wallet.</p>
           </div>
           <!-- connected -->
           <div id="hsEarn" style="display:none">
@@ -366,15 +380,33 @@
               <div class="tickbar" id="tickBar"></div>
               <div class="tickcount"><span class="g" id="tickNum">0</span> / 10 ticks · <span id="eggNum">0</span> 🥚 banked</div>
             </div>
+            <div class="hs-stats">
+              <div class="hs-stat"><div class="n" id="totalTicksNum">0</div><div class="l">TOTAL TICKS EARNED</div></div>
+              <div class="hs-stat"><div class="n" id="referCountNum">0</div><div class="l">FRIENDS SIGNED UP</div></div>
+            </div>
             <div class="earn-row">
               <button class="earn-btn" id="earnPost">📣 Post today <b>+2</b></button>
-              <button class="earn-btn" id="earnRefer">🤝 Copy invite <b>+1</b></button>
+              <button class="earn-btn" id="earnRefer">🤝 Copy invite link</button>
             </div>
             <div class="hs-egg-won" id="eggWon" style="display:none"></div>
             <button class="hs-disconnect" id="hsDisconnect">Disconnect</button>
-            <p class="hs-note">Preview on this device. At launch, connect the same X in-game to claim your eggs. Posts are re-checked — delete them and those ticks don't count. Referral ticks land as each friend joins &amp; activates.</p>
+            <p class="hs-note">Preview on this device. At launch, connect the same X in-game to claim your eggs. Posts are re-checked — delete them and those ticks don't count. <b>Referral ticks and the "friends signed up" count land once each friend actually connects the same X in-game and activates their own farm</b> — real-time tracking across everyone arrives with the backend; right now this device only knows your own progress.</p>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- X FACTS — a rotating list Cody can post from any time, no daily gate (unlike the
+       in-game once-a-day tip). Purely a hype/share tool, not tied to the tick system. -->
+  <section id="xfacts" style="padding-top:clamp(16px,3vw,32px)">
+    <div class="hs-panel xfacts-panel">
+      <div class="hs-pill"><i></i> Something to post</div>
+      <h3 style="font-family:var(--disp);font-weight:900;font-size:19px;margin:0">GREEN LIFE fact</h3>
+      <p id="factText">Loading…</p>
+      <div class="xfacts-row">
+        <button class="x-btn" id="factPost">𝕏&nbsp; Post this</button>
+        <button class="xfacts-ghost" id="factShuffle">🔀 Show another</button>
       </div>
     </div>
   </section>
@@ -668,13 +700,17 @@
   // ── Pre-launch head start: connect X (public handle only, no login) + bank Weedster Egg ticks.
   // Saved in localStorage so a visitor's progress persists on their device. Real cross-device
   // crediting to the connected X happens at launch via the backend (see note in the panel).
-  var TARGET = 10, POST = 2, REFER = 1, DAY = 864e5;
+  var TARGET = 10, POST = 2, DAY = 864e5;
   var KEY = "gl_headstart_v1";
   var GAME_URL = location.origin + location.pathname; // referral link base
   var el = function(id){ return document.getElementById(id); };
   var load = function(){ try { return JSON.parse(localStorage.getItem(KEY)) || null; } catch(e){ return null; } };
   var save = function(s){ try { localStorage.setItem(KEY, JSON.stringify(s)); } catch(e){} };
-  var state = load(); // { handle, ticks, eggs, lastPost }
+  var state = load(); // { handle, ticks, eggs, lastPost, refCount }
+  // refCount ONLY ever gets written by the real backend crediting a referral on a friend's
+  // activation (see supabase/schema.sql credit_referral) — never bumped by this device's own
+  // clicks, since a click on your OWN copy button is not a friend signing up. Starts and stays
+  // 0 on this static preview until that backend call exists; real numbers arrive with it.
 
   function render(){
     if(!state){ el("hsConnect").style.display="block"; el("hsEarn").style.display="none"; return; }
@@ -689,6 +725,11 @@
     // tick bar
     var bar = el("tickBar"); bar.innerHTML = "";
     for(var i=0;i<TARGET;i++){ var d=document.createElement("div"); d.className="t"+(i<into?" on":""); bar.appendChild(d); }
+    // lifetime counters — state.ticks is already the running total (never reset by the modulo
+    // bar above), so it's real right now. referCount stays real too, just honestly at 0 until
+    // the backend can see other people's signups.
+    el("totalTicksNum").textContent = state.ticks;
+    el("referCountNum").textContent = state.refCount || 0;
     // post cooldown (once/day)
     var postBtn = el("earnPost");
     var canPost = !state.lastPost || (Date.now() - state.lastPost >= DAY);
@@ -714,7 +755,7 @@
   function connect(){
     var h = (el("xHandle").value||"").trim().replace(/^@+/,"").replace(/\s+/g,"");
     if(!h) return;
-    state = { handle:h, ticks:0, eggs:0, lastPost:0 };
+    state = { handle:h, ticks:0, eggs:0, lastPost:0, refCount:0 };
     save(state); render();
   }
   el("xGo").addEventListener("click", connect);
@@ -730,14 +771,15 @@
     addTicks(POST);
   });
 
-  // earn: copy invite (+1 per use — simulated referral on the static page)
+  // earn: copy invite link. No instant tick here — clicking your OWN copy button isn't a
+  // friend signing up, so it would be dishonest to reward it. The real +1 lands later, via the
+  // backend's credit_referral(), the moment that friend actually activates their own farm.
   el("earnRefer").addEventListener("click", function(){
     var ref = GAME_URL + "?ref=" + encodeURIComponent(state.handle);
     try { navigator.clipboard.writeText(ref); } catch(e){}
     var b = el("earnRefer"); var old = b.innerHTML;
     b.innerHTML = "✓ Link copied!";
-    addTicks(REFER);
-    setTimeout(function(){ b.innerHTML = old; render(); }, 1400);
+    setTimeout(function(){ b.innerHTML = old; }, 1400);
   });
 
   el("hsDisconnect").addEventListener("click", function(){
@@ -748,6 +790,38 @@
   });
 
   render();
+
+  // ── X FACTS — a growing list Cody can post from any time, no daily gate. Purely a hype/
+  //    share tool; posting here does NOT earn ticks (that's what the "Post today" button is
+  //    for) — this is just an easy way to keep fresh, factual content going out on X.
+  //    Add more facts any time: just append a string to this array.
+  var SITE_FACTS = [
+    "420,000,000,000 $GREEN mints once at launch. The mint authority gets revoked right after — no team faucet, no surprise inflation, ever.",
+    "Every $GREEN spent in-game — packs, breeding, upgrades — gets burned forever. Not recycled, not returned to anyone.",
+    "10% of every marketplace trade splits automatically: 5% buys back and burns $GREEN, 5% goes to treasury. No manual step, no delay.",
+    "The emissions pool decays about 0.025% a day — a ~7.6 year half-life. Built to last for years, not drain in a month.",
+    "Breeding two Mythicals together ALWAYS fuses into a bigger one — guaranteed, no coin flip.",
+    "Fast Autos harvest a full cycle in just 7 days instead of 30 — built for players who want a faster turnaround.",
+    "5 PvP mini-games at launch: Rob/Raid, Spin The Bong, Rock Paper Scissors, Closest to the Bud, and Greedy Smoker.",
+    "A Weedster Egg always cracks an Epic, Legendary, or Mythical plant — no weak pulls, ever.",
+    "Buy-in SOL doesn't sit with the team — it routes straight into the liquidity pool, by design.",
+    "GREEN LIFE's economy has ONE emissions rate dial, and it's hard-capped at 2% forever — even a compromised key can't mint past that ceiling."
+  ];
+  var lastFactIdx = -1;
+  function pickFact(){
+    if(SITE_FACTS.length <= 1) return 0;
+    var i;
+    do { i = Math.floor(Math.random()*SITE_FACTS.length); } while(i === lastFactIdx);
+    lastFactIdx = i;
+    return i;
+  }
+  function showFact(){ el("factText").textContent = SITE_FACTS[pickFact()]; }
+  el("factShuffle").addEventListener("click", showFact);
+  el("factPost").addEventListener("click", function(){
+    var text = "🌿 " + el("factText").textContent + "\n\n" + GAME_URL + "\n#GREENLIFE #Solana";
+    window.open("https://twitter.com/intent/tweet?text=" + encodeURIComponent(text), "_blank", "noopener");
+  });
+  showFact();
 })();
 </script>
 

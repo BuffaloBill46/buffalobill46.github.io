@@ -208,6 +208,20 @@
   .soon-tag{display:inline-block;font-size:9.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;
     color:var(--mut2);background:rgba(255,255,255,.08);border-radius:999px;padding:2px 8px;margin-left:4px;vertical-align:1px}
 
+  /* ── LEADERBOARD ── */
+  .lb-row{display:grid;grid-template-columns:30px 1fr repeat(3,66px);align-items:center;gap:8px;
+    background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:12px;
+    padding:10px 14px;margin-bottom:8px}
+  .lb-head{display:grid;grid-template-columns:30px 1fr repeat(3,66px);gap:8px;padding:0 14px 6px;
+    font-size:9px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--mut2)}
+  .lb-head span:not(:first-child){text-align:center}
+  .lb-rank{font-family:var(--disp);font-weight:900;color:var(--mut2);text-align:center;font-size:14px}
+  .lb-rank.top1{color:#ffc94d}
+  .lb-rank.top2{color:#d7dbe0}
+  .lb-rank.top3{color:#c9a27a}
+  .lb-handle{font-weight:800;font-size:13px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .lb-stat{text-align:center;font-family:var(--disp);font-weight:900;font-size:14px;color:var(--ink)}
+
   /* crew gallery — hover = plays a preview video (poster = still image), click = lightbox */
   .crew{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;margin-top:30px}
   .crew .c{border-radius:16px;overflow:hidden;border:1px solid var(--line);background:#000;position:relative;
@@ -391,9 +405,10 @@
               <div class="tickbar" id="tickBar"></div>
               <div class="tickcount"><span class="g" id="tickNum">0</span> / 10 ticks · <span id="eggNum">0</span> 🥚 banked</div>
             </div>
-            <div class="hs-stats">
+            <div class="hs-stats" style="grid-template-columns:repeat(3,1fr)">
               <div class="hs-stat"><div class="n" id="totalTicksNum">0</div><div class="l">TOTAL TICKS EARNED</div></div>
               <div class="hs-stat"><div class="n" id="referCountNum">0</div><div class="l">FRIENDS SIGNED UP</div></div>
+              <div class="hs-stat"><div class="n" id="referActivatedNum">0</div><div class="l">FRIENDS ACTIVATED</div></div>
             </div>
             <div class="earn-row">
               <button class="earn-btn done" id="earnPost">📣 Post today <span class="soon-tag">+2 coming soon</span></button>
@@ -401,7 +416,7 @@
             </div>
             <div class="hs-egg-won" id="eggWon" style="display:none"></div>
             <button class="hs-disconnect" id="hsDisconnect">Disconnect</button>
-            <p class="hs-note">At launch, connect the same X in-game to claim your eggs. Posts are re-checked — delete them and those ticks don't count. <b>Referral ticks and the "friends signed up" count land once each friend actually connects the same X in-game and activates their own farm</b> — the same activation-only rule the real in-game referral system runs on, no exceptions.</p>
+            <p class="hs-note">At launch, connect the same X in-game to claim your eggs. Posts are re-checked — delete them and those ticks don't count. <b>"Friends signed up" counts anyone who's ever used your link</b> — no waiting on anything. <b>Referral ticks (and "friends activated") land once that friend actually connects the same X in-game and activates their own farm</b> — the same activation-only rule the real in-game referral system runs on, no exceptions.</p>
           </div>
         </div>
       </div>
@@ -419,6 +434,22 @@
         <button class="x-btn" id="factPost" disabled>𝕏&nbsp; Post this <span class="soon-tag">+2 ticks coming soon</span></button>
         <button class="xfacts-ghost" id="factShuffle">🔀 Show another</button>
       </div>
+    </div>
+  </section>
+
+  <!-- LEADERBOARD — public, no connect needed. Own block, separate from the head-start panel
+       and the facts panel above (Cody, 2026-07-31). Ranked by signups, since that's the metric
+       most likely to actually move before launch. -->
+  <section id="leaderboard" style="padding-top:clamp(16px,3vw,32px)">
+    <div class="center" style="max-width:560px">
+      <div class="hs-pill"><i></i> Real activity, right now</div>
+      <h2 style="margin-bottom:8px">Top referrers <span class="g">so far.</span></h2>
+      <p class="lede" style="margin-bottom:18px">Everyone banking a head start, ranked live — no connecting needed to see it.</p>
+    </div>
+    <div style="max-width:640px;margin:0 auto;overflow-x:auto">
+      <div id="lbLoading" style="text-align:center;color:var(--mut);font-size:13px;padding:20px">Loading leaderboard…</div>
+      <div id="lbEmpty" style="display:none;text-align:center;color:var(--mut);font-size:13px;padding:20px">Nobody's on the board yet — connect your X above and be the first.</div>
+      <div id="lbRows" style="min-width:420px"></div>
     </div>
   </section>
   </div>
@@ -720,10 +751,12 @@
   var el = function(id){ return document.getElementById(id); };
   var load = function(){ try { return JSON.parse(localStorage.getItem(KEY)) || null; } catch(e){ return null; } };
   var save = function(s){ try { localStorage.setItem(KEY, JSON.stringify(s)); } catch(e){} };
-  var state = load(); // { handle, ticks, eggs, lastPost, refCount, accountId }
-  // refCount ONLY ever gets written by the real backend crediting a referral on a friend's
-  // activation (see supabase/schema.sql credit_referral) — never bumped by this device's own
-  // clicks, since a click on your OWN copy button is not a friend signing up.
+  var state = load(); // { handle, ticks, eggs, lastPost, refCount, referActivated, accountId }
+  // Two different counters, on purpose (Cody, 2026-07-31): refCount is a pure headcount — everyone
+  // who ever used your code, no gate, no tick attached, since it's the only thing that CAN happen
+  // before the game launches. referActivated is the one that actually pays a tick out (via
+  // credit_referral, once that friend later mints a real farm) — never conflate the two. Neither
+  // is ever bumped by this device's own clicks; both only ever come back from account-link.
 
   // ── Real backend (Supabase Edge Functions) — LIVE 2026-07-31 ──────────────
   // The anon key below is SAFE to ship in plain HTML: every table has RLS on
@@ -763,10 +796,11 @@
     var bar = el("tickBar"); bar.innerHTML = "";
     for(var i=0;i<TARGET;i++){ var d=document.createElement("div"); d.className="t"+(i<into?" on":""); bar.appendChild(d); }
     // lifetime counters — state.ticks is already the running total (never reset by the modulo
-    // bar above), so it's real right now. referCount stays real too, just honestly at 0 until
-    // the backend can see other people's signups.
+    // bar above), so it's real right now. refCount/referActivated stay honestly at 0 until the
+    // backend's had a chance to answer (see connect()'s linkAccount call below).
     el("totalTicksNum").textContent = state.ticks;
     el("referCountNum").textContent = state.refCount || 0;
+    el("referActivatedNum").textContent = state.referActivated || 0;
     // earnPost stays permanently greyed (class="earn-btn done" in the HTML, "+2 coming soon")
     // until real X-post verification is live — render() must NEVER touch its class/label here,
     // or it would un-grey itself the next time this function runs (e.g. right after connecting).
@@ -790,7 +824,7 @@
   function connect(){
     var h = (el("xHandle").value||"").trim().replace(/^@+/,"").replace(/\s+/g,"");
     if(!h) return;
-    state = { handle:h, ticks:0, eggs:0, lastPost:0, refCount:0, accountId:null };
+    state = { handle:h, ticks:0, eggs:0, lastPost:0, refCount:0, referActivated:0, accountId:null };
     save(state); render();
     // Real account link — creates (or finds) this X handle's permanent account, and if they
     // arrived via a friend's ?ref= link, records that pending referral (credited only once
@@ -798,7 +832,8 @@
     linkAccount("x_handle", h, refFromUrl).then(function(linked){
       if(!linked || !state || state.handle !== h) return; // stale response (e.g. disconnected meanwhile)
       state.accountId = linked.account_id;
-      state.refCount = linked.referred_activated_count;
+      state.refCount = linked.referred_signup_count;
+      state.referActivated = linked.referred_activated_count;
       save(state); render();
     });
   }
@@ -831,6 +866,34 @@
     setTimeout(function(){ b.innerHTML = old; }, 1400);
   });
 
+  // ── LEADERBOARD — public, no connect needed, its own block (Cody, 2026-07-31: "make a
+  //    leader board with all 3 stats... that way everyone can see overall stats"). Hits the
+  //    leaderboard Edge Function once on load; every visitor sees it, connected or not.
+  function loadLeaderboard(){
+    fetch(SUPABASE_URL + "/functions/v1/leaderboard", {
+      headers: { "Authorization": "Bearer " + SUPABASE_ANON_KEY },
+    }).then(function(r){ return r.json(); }).then(function(j){
+      el("lbLoading").style.display = "none";
+      var rows = (j && j.ok) ? j.rows : [];
+      if(!rows.length){ el("lbEmpty").style.display = "block"; return; }
+      var top = ["top1","top2","top3"];
+      var html = '<div class="lb-head"><span>#</span><span>Player</span><span>Signed up</span><span>Activated</span><span>Ticks</span></div>';
+      rows.forEach(function(row, i){
+        html += '<div class="lb-row">'
+          + '<div class="lb-rank' + (top[i] ? " " + top[i] : "") + '">' + (i+1) + '</div>'
+          + '<div class="lb-handle">@' + row.handle + '</div>'
+          + '<div class="lb-stat">' + row.signups + '</div>'
+          + '<div class="lb-stat">' + row.activated + '</div>'
+          + '<div class="lb-stat">' + row.ticks + '</div>'
+          + '</div>';
+      });
+      el("lbRows").innerHTML = html;
+    }).catch(function(){
+      el("lbLoading").textContent = "Couldn't load the leaderboard right now.";
+    });
+  }
+  loadLeaderboard();
+
   el("hsDisconnect").addEventListener("click", function(){
     if(!confirm("Disconnect and clear your saved head start on this device?")) return;
     state = null; try { localStorage.removeItem(KEY); } catch(e){}
@@ -839,6 +902,17 @@
   });
 
   render();
+  // Returning visitor — re-sync their real counts. Referral credits land whenever the friend
+  // THEY referred eventually activates (could be days later), so the numbers saved from their
+  // last visit are frozen until this runs. Silent no-op if unreachable or not yet connected.
+  if(state && state.accountId){
+    linkAccount("x_handle", state.handle).then(function(linked){
+      if(!linked || !state) return;
+      state.refCount = linked.referred_signup_count;
+      state.referActivated = linked.referred_activated_count;
+      save(state); render();
+    });
+  }
 
   // ── X FACTS — a growing list Cody can post from any time, no daily gate. Purely a hype/
   //    share tool; posting here does NOT earn ticks (that's what the "Post today" button is

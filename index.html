@@ -203,6 +203,10 @@
   .xfacts-ghost{background:var(--panel2);border:1px solid var(--line2);border-radius:14px;padding:14px 18px;
     font-family:var(--body);font-weight:800;font-size:14px;color:var(--ink);cursor:pointer;transition:transform .12s,border-color .2s}
   .xfacts-ghost:hover{transform:translateY(-2px);border-color:var(--g)}
+  .x-btn:disabled{opacity:.45;cursor:not-allowed}
+  .x-btn:disabled:hover{transform:none;border-color:#2f2f38}
+  .soon-tag{display:inline-block;font-size:9.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;
+    color:var(--mut2);background:rgba(255,255,255,.08);border-radius:999px;padding:2px 8px;margin-left:4px;vertical-align:1px}
 
   /* crew gallery — hover = plays a preview video (poster = still image), click = lightbox */
   .crew{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;margin-top:30px}
@@ -390,7 +394,7 @@
             </div>
             <div class="hs-egg-won" id="eggWon" style="display:none"></div>
             <button class="hs-disconnect" id="hsDisconnect">Disconnect</button>
-            <p class="hs-note">Preview on this device. At launch, connect the same X in-game to claim your eggs. Posts are re-checked — delete them and those ticks don't count. <b>Referral ticks and the "friends signed up" count land once each friend actually connects the same X in-game and activates their own farm</b> — real-time tracking across everyone arrives with the backend; right now this device only knows your own progress.</p>
+            <p class="hs-note">Preview on this device. At launch, connect the same X in-game to claim your eggs. Posts are re-checked — delete them and those ticks don't count. <b>Referral ticks and the "friends signed up" count land once each friend actually connects the same X in-game and activates their own farm</b> — the same activation-only rule the real in-game referral system runs on, no exceptions. Real-time tracking across everyone arrives with the backend; right now this device only knows your own progress.</p>
           </div>
         </div>
       </div>
@@ -405,7 +409,7 @@
       <h3 style="font-family:var(--disp);font-weight:900;font-size:19px;margin:0">GREEN LIFE fact</h3>
       <p id="factText">Loading…</p>
       <div class="xfacts-row">
-        <button class="x-btn" id="factPost">𝕏&nbsp; Post this</button>
+        <button class="x-btn" id="factPost" disabled>𝕏&nbsp; Post this <span class="soon-tag">+2 ticks coming soon</span></button>
         <button class="xfacts-ghost" id="factShuffle">🔀 Show another</button>
       </div>
     </div>
@@ -817,6 +821,9 @@
   }
   function showFact(){ el("factText").textContent = SITE_FACTS[pickFact()]; }
   el("factShuffle").addEventListener("click", showFact);
+  // factPost is `disabled` in the HTML for now (+2 ticks coming soon, greyed out) — a disabled
+  // button never fires click, so this handler is inert until the disabled attribute is removed
+  // once fact-posting actually earns ticks.
   el("factPost").addEventListener("click", function(){
     var text = "🌿 " + el("factText").textContent + "\n\n" + GAME_URL + "\n#GREENLIFE #Solana";
     window.open("https://twitter.com/intent/tweet?text=" + encodeURIComponent(text), "_blank", "noopener");

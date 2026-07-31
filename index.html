@@ -710,11 +710,34 @@
   var el = function(id){ return document.getElementById(id); };
   var load = function(){ try { return JSON.parse(localStorage.getItem(KEY)) || null; } catch(e){ return null; } };
   var save = function(s){ try { localStorage.setItem(KEY, JSON.stringify(s)); } catch(e){} };
-  var state = load(); // { handle, ticks, eggs, lastPost, refCount }
+  var state = load(); // { handle, ticks, eggs, lastPost, refCount, accountId }
   // refCount ONLY ever gets written by the real backend crediting a referral on a friend's
   // activation (see supabase/schema.sql credit_referral) — never bumped by this device's own
-  // clicks, since a click on your OWN copy button is not a friend signing up. Starts and stays
-  // 0 on this static preview until that backend call exists; real numbers arrive with it.
+  // clicks, since a click on your OWN copy button is not a friend signing up.
+
+  // ── Real backend (Supabase Edge Functions) — LIVE 2026-07-31 ──────────────
+  // The anon key below is SAFE to ship in plain HTML: every table has RLS on
+  // with no policies, so this key can read/write nothing directly — it only
+  // authenticates the call to account-link, which does the real work
+  // server-side with the service-role key. See supabase/functions/account-link.
+  var SUPABASE_URL = "https://uvwvcioeqxnxahijlbau.supabase.co";
+  var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV2d3ZjaW9lcXhueGFoaWpsYmF1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUyOTAzNDIsImV4cCI6MjEwMDg2NjM0Mn0.CNP0GnnvWBsvOeDJj1cqG88S6YtjqgNN3YEwKV1f9HE";
+  // Capture ?ref= once at page load — a person who arrived via a friend's
+  // invite link gets that code applied the moment they connect X below.
+  var refFromUrl = (function(){
+    var m = location.search.match(/[?&]ref=([^&]+)/);
+    return m ? decodeURIComponent(m[1]) : null;
+  })();
+  function linkAccount(kind, value, referredByCode){
+    return fetch(SUPABASE_URL + "/functions/v1/account-link", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": "Bearer " + SUPABASE_ANON_KEY },
+      body: JSON.stringify(referredByCode ? { kind: kind, value: value, referred_by_code: referredByCode } : { kind: kind, value: value }),
+    }).then(function(r){ return r.json(); }).then(function(j){ return j && j.ok ? j : null; }).catch(function(){ return null; });
+    // Fails silent on purpose — an unreachable backend must never block connecting X or
+    // strand a visitor; the local ticks/eggs/link still work, only the real friend count
+    // and the permanent account linkage wait for the next successful call.
+  }
 
   function render(){
     if(!state){ el("hsConnect").style.display="block"; el("hsEarn").style.display="none"; return; }
@@ -757,8 +780,17 @@
   function connect(){
     var h = (el("xHandle").value||"").trim().replace(/^@+/,"").replace(/\s+/g,"");
     if(!h) return;
-    state = { handle:h, ticks:0, eggs:0, lastPost:0, refCount:0 };
+    state = { handle:h, ticks:0, eggs:0, lastPost:0, refCount:0, accountId:null };
     save(state); render();
+    // Real account link — creates (or finds) this X handle's permanent account, and if they
+    // arrived via a friend's ?ref= link, records that pending referral (credited only once
+    // THIS handle later activates a real farm in-game — see credit_referral in schema.sql).
+    linkAccount("x_handle", h, refFromUrl).then(function(linked){
+      if(!linked || !state || state.handle !== h) return; // stale response (e.g. disconnected meanwhile)
+      state.accountId = linked.account_id;
+      state.refCount = linked.referred_activated_count;
+      save(state); render();
+    });
   }
   el("xGo").addEventListener("click", connect);
   el("xHandle").addEventListener("keydown", function(e){ if(e.key==="Enter") connect(); });

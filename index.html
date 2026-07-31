@@ -724,7 +724,7 @@
   el("earnPost").addEventListener("click", function(){
     if(state.lastPost && (Date.now()-state.lastPost < DAY)) return;
     var ref = GAME_URL + "?ref=" + encodeURIComponent(state.handle);
-    var text = "🌿 I'm banking my head start for GREEN LIFE — the first fixed-supply P2E on Solana. 420B minted once, never again. Grow, breed & earn $GREEN 👇\n" + ref + "\n#GREENLIFE #Solana";
+    var text = "🌿 I'm banking my head start for GREEN LIFE — fixed-supply, zero-inflation P2E on Solana. 420B minted once, never again. Grow, breed & earn $GREEN 👇\n" + ref + "\n#GREENLIFE #Solana";
     window.open("https://twitter.com/intent/tweet?text=" + encodeURIComponent(text), "_blank", "noopener");
     state.lastPost = Date.now();
     addTicks(POST);

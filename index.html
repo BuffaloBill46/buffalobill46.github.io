@@ -221,6 +221,10 @@
   .lb-rank.top3{color:#c9a27a}
   .lb-handle{font-weight:800;font-size:13px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .lb-stat{text-align:center;font-family:var(--disp);font-weight:900;font-size:14px;color:var(--ink)}
+  .lb-scroll{max-height:462px;overflow-y:auto;padding-right:6px;scrollbar-width:thin;scrollbar-color:var(--g) var(--panel)}
+  .lb-scroll::-webkit-scrollbar{width:8px}
+  .lb-scroll::-webkit-scrollbar-track{background:var(--panel);border-radius:999px}
+  .lb-scroll::-webkit-scrollbar-thumb{background:var(--g);border-radius:999px}
 
   /* crew gallery — hover = plays a preview video (poster = still image), click = lightbox */
   .crew{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;margin-top:30px}
@@ -453,7 +457,10 @@
     <div style="max-width:640px;margin:0 auto;overflow-x:auto">
       <div id="lbLoading" style="text-align:center;color:var(--mut);font-size:13px;padding:20px">Loading leaderboard…</div>
       <div id="lbEmpty" style="display:none;text-align:center;color:var(--mut);font-size:13px;padding:20px">Nobody's on the board yet — connect your X above and be the first.</div>
-      <div id="lbRows" style="min-width:420px"></div>
+      <div id="lbBox" style="display:none;min-width:420px">
+        <div class="lb-head"><span>#</span><span>Player</span><span>Signed up</span><span>Activated</span><span>Ticks</span></div>
+        <div id="lbRows" class="lb-scroll"></div>
+      </div>
     </div>
   </section>
   </div>
@@ -881,7 +888,7 @@
       var rows = (j && j.ok) ? j.rows : [];
       if(!rows.length){ el("lbEmpty").style.display = "block"; return; }
       var top = ["top1","top2","top3"];
-      var html = '<div class="lb-head"><span>#</span><span>Player</span><span>Signed up</span><span>Activated</span><span>Ticks</span></div>';
+      var html = "";
       rows.forEach(function(row, i){
         html += '<div class="lb-row">'
           + '<div class="lb-rank' + (top[i] ? " " + top[i] : "") + '">' + (i+1) + '</div>'
@@ -892,6 +899,7 @@
           + '</div>';
       });
       el("lbRows").innerHTML = html;
+      el("lbBox").style.display = "block";
     }).catch(function(){
       el("lbLoading").textContent = "Couldn't load the leaderboard right now.";
     });

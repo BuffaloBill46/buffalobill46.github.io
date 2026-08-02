@@ -375,7 +375,7 @@
         <div>
           <div class="hs-pill"><i></i> Pre-launch · earn before day one</div>
           <h2 style="margin-bottom:12px">Start earning <span class="g">before the game even opens.</span></h2>
-          <p class="lede" style="margin-bottom:16px">In GREEN LIFE, <b>10 ticks = a Weedster Egg</b> — and every egg cracks a guaranteed <b style="color:var(--p)">Epic, Legendary, or Mythical</b> strain, the rarest cards in the game. You earn ticks by posting and referring friends. Connect your X now and you can <b>bank those ticks today</b>, so you walk into launch with eggs already waiting to crack.</p>
+          <p class="lede" style="margin-bottom:16px">In GREEN LIFE, <b>15 ticks = a Weedster Egg</b> — and every egg cracks a guaranteed <b style="color:var(--p)">Epic, Legendary, or Mythical</b> strain, the rarest cards in the game. You earn ticks by posting and referring friends. Connect your X now and you can <b>bank those ticks today</b>, so you walk into launch with eggs already waiting to crack.</p>
           <div style="background:rgba(82,227,0,.14);border:1px solid rgba(82,227,0,.45);border-radius:12px;padding:14px 16px;margin:0 0 18px;box-shadow:0 0 20px rgba(82,227,0,.15)">
             <div style="font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#a6ff8f;margin-bottom:10px">⚠️ Rules for Refer</div>
             <div style="display:flex;flex-direction:column;gap:8px">
@@ -411,7 +411,7 @@
             </div>
             <div class="tickwrap">
               <div class="tickbar" id="tickBar"></div>
-              <div class="tickcount"><span class="g" id="tickNum">0</span> / 10 ticks · <span id="eggNum">0</span> 🥚 banked</div>
+              <div class="tickcount"><span class="g" id="tickNum">0</span> / 15 ticks · <span id="eggNum">0</span> 🥚 banked</div>
             </div>
             <div class="hs-stats" style="grid-template-columns:repeat(3,1fr)">
               <div class="hs-stat"><div class="n" id="totalTicksNum">0</div><div class="l">TOTAL TICKS EARNED</div></div>
@@ -609,9 +609,9 @@
   <section>
     <div class="eyebrow">Bet against other growers</div>
     <h2>5 PvP games, <span class="g">all wagered in $GREEN.</span></h2>
-    <p class="lede">Every game runs on the same simple rule: a small house fee (2.5% burned · 2.5% treasury, 20% on Rob) — everything else goes to the winner.</p>
+    <p class="lede">Every game runs on the same simple rule: a small house fee (2.5% burned · 2.5% treasury, 10% on Rob) — everything else goes to the winner.</p>
     <div class="games">
-      <div class="gamecard"><img loading="lazy" src="img/pvp/rob_hero.jpg" alt="Rob"><span class="gc-fee">20% fee</span>
+      <div class="gamecard"><img loading="lazy" src="img/pvp/rob_hero.jpg" alt="Rob"><span class="gc-fee">10% fee</span>
         <div class="gc-body"><h3>🥷 Rob</h3><p>Send your combined power to raid a rival's farm for their $GREEN — full cinematic faceoff, anti-grief shields protect newcomers.</p></div></div>
       <div class="gamecard"><img loading="lazy" src="img/pvp/bong_hero.jpg" alt="Spin The Bong"><span class="gc-fee">5% fee</span>
         <div class="gc-body"><h3>💨 Spin The Bong</h3><p>2–10 growers ante the same bet, the bong spins, and it picks a winner — Heads Up, Winner Take All, or Elimination.</p></div></div>
@@ -756,7 +756,7 @@
   // ── Pre-launch head start: connect X (public handle only, no login) + bank Weedster Egg ticks.
   // Saved in localStorage so a visitor's progress persists on their device. Real cross-device
   // crediting to the connected X happens at launch via the backend (see note in the panel).
-  var TARGET = 10, POST = 2, DAY = 864e5;
+  var TARGET = 15, POST = 2, DAY = 864e5;
   var KEY = "gl_headstart_v1";
   var GAME_URL = location.origin + location.pathname; // referral link base
   var el = function(id){ return document.getElementById(id); };
